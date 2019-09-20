@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <h1>Calculator</h1>
+    <div id="parent-cal">
+      <div class="row">
+        <div class="cal-col" id="cal-display-default">0</div>
+      </div>
+      <div class="row">
+        <div class="cal-btn cal-col" id="cal-ac">AC</div>
+        <div class="cal-btn cal-col" id="cal-backspace">&#8676;</div>
+        <div class="cal-btn cal-op-btn cal-col" id="cal-divide">&#247;</div>
+      </div>
+      <div class="row">
+        <div class="cal-btn cal-num-btn cal-col" id="cal-seven">7</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-eight">8</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-nine">9</div>
+        <div class="cal-btn cal-op-btn cal-col" id="cal-product">x</div>
+
+      </div>
+      <div class="row">
+        <div class="cal-btn cal-num-btn cal-col" id="cal-four">4</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-five">5</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-six">6</div>
+        <div class="cal-btn cal-op-btn cal-col" id="cal-subtract">-</div>
+      </div>
+      <div class="row">
+        <div class="cal-btn cal-num-btn cal-col" id="cal-one">1</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-two">2</div>
+        <div class="cal-btn cal-num-btn cal-col" id="cal-three">3</div>
+        <div class="cal-btn cal-op-btn cal-col" id="cal-add">+</div>
+      </div>
+      <div class="row">
+        <div class="cal-btn cal-num-btn cal-col" id="cal-zero">0</div>
+        <div class="cal-btn cal-col" id="cal-dot">.</div>
+        <div class="cal-btn cal-op-btn cal-col" id="cal-equal">=</div>
+      </div>
+    </div>
+    <!-- Java Script- Adding Functionality  -->
+    <script>
+
+      var OneBtn = document.getElementById('cal-one');
+      var TwoBtn = document.getElementById('cal-two');
+      var ThreeBtn = document.getElementById('cal-three');
+      var FourBtn = document.getElementById('cal-four');
+      var FiveBtn = document.getElementById('cal-five');
+      var SixBtn = document.getElementById('cal-six');
+      var SevenBtn = document.getElementById('cal-seven');
+      var EightBtn = document.getElementById('cal-eight');
+      var NineBtn = document.getElementById('cal-nine');
+      var ZeroBtn = document.getElementById('cal-zero');
+
+      var DotBtn = document.getElementById('cal-dot');
+      var ClrBtn = document.getElementById('cal-ac');
+      var BkBtn = document.getElementById('cal-backspace');
+      var DisplayDef = document.getElementById('cal-display-default');
+
+      var DisplayVal = '0';
+      var PendingVal;
+      var EvalStrArr = [];
+
+      var NumBtn = document.getElementsByClassName('cal-num-btn');
+      var OpBtn = document.getElementsByClassName('cal-op-btn');
+
+      var updateDisplayVal = (clickObj) => {
+        var BtnTxt = clickObj.target.innerText;
+
+        if (DisplayVal == '0')
+            DisplayVal = '';
+        DisplayVal += BtnTxt;
+        DisplayDef.innerText = DisplayVal;
+      }
+
+      var performOperation = (clickObj) => {
+        var operator = clickObj.target.innerText;
+        switch (operator) {
+          case '+':
+            PendingVal = DisplayVal;
+            DisplayVal = 0;
+            DisplayDef.innerText = DisplayVal;
+            EvalStrArr.push(PendingVal);
+            EvalStrArr.push('+');
+
+            break;
+          case '-':
+            PendingVal = DisplayVal;
+            DisplayVal = 0;
+            DisplayDef.innerText = DisplayVal;
+            EvalStrArr.push(PendingVal);
+            EvalStrArr.push('-');
+
+            break;
+          case 'x':
+            PendingVal = DisplayVal;
+            DisplayVal = 0;
+            DisplayDef.innerText = DisplayVal;
+            EvalStrArr.push(PendingVal);
+            EvalStrArr.push('*');
+
+            break;
+          case '÷':
+            PendingVal = DisplayVal;
+            DisplayVal = 0;
+            DisplayDef.innerText = DisplayVal;
+            EvalStrArr.push(PendingVal);
+            EvalStrArr.push('/');
+            break;
+          case '=':
+            EvalStrArr.push(DisplayVal);
+            var evaluation = eval(EvalStrArr.join(''));
+            DisplayVal = evaluation + '';
+            DisplayDef.innerText = DisplayVal;
+            EvalStrArr = [];
+            break;
+          default:
+
+        }
+      }
+
+
+      for (let i = 0; i < NumBtn.length; i++) {
+        NumBtn[i].addEventListener('click', updateDisplayVal, false);
+      }
+      for (let i = 0; i < OpBtn.length; i++) {
+        OpBtn[i].addEventListener('click', performOperation, false);
+      }
+
+      ClrBtn.onclick = () => {
+        DisplayVal = '0';
+        PendingVal = undefined;
+        EvalStrArr = [];
+        DisplayDef.innerHTML = DisplayVal;
+      }
+      BkBtn.onclick = () => {
+        let LenDisplayVal = DisplayVal.length;
+        DisplayVal = DisplayVal.slice(0,LenDisplayVal - 1);
+        if(DisplayVal === '')
+            DisplayVal = '0';
+        DisplayDef.innerText = DisplayVal;
+      }
+      DotBtn.onclick = () => {
+        if(!DisplayVal.includes('.'))
+            DisplayVal = '.';
+        DisplayDef.innerText = DisplayVal;
+      }
+
+
+
+    </script>
+  </body>
+</html>
